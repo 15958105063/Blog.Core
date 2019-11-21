@@ -75,6 +75,7 @@ namespace Blog.Core.AuthHelper.OverWrite
         {
             var jwtHandler = new JwtSecurityTokenHandler();
             JwtSecurityToken jwtToken = jwtHandler.ReadJwtToken(jwtStr);
+            //var jwtToken = new System.IdentityModel.Tokens.Jwt.JwtSecurityToken(jwtStr);
             object role;
             try
             {

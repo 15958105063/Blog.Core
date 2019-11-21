@@ -70,6 +70,7 @@ namespace Blog.Core.Services
                     roleName = string.Join(',', roles.Select(r => r.Name).ToArray());
                 }
             }
+
             return roleName;
         }
     }

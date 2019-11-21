@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Blog.Core.Model;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Blog.Core.Controllers
 {
@@ -21,83 +22,35 @@ namespace Blog.Core.Controllers
         /// </summary>
         /// <returns></returns>
         /// 
-        [ApiExplorerSettings(IgnoreApi = true)]//隐藏swagger中接口显示
+        //[ApiExplorerSettings(IgnoreApi = true)]//隐藏swagger中接口显示
         [HttpGet("all")]
+        [Authorize(Roles ="Admin")]//设置角色
 
         //
-        public JsonResult GetProducts()
+        public string GetProducts()
         {
-            return new JsonResult(new List<Products>
-            {
-                new Products
-                {
-                    ID = 1,
-                    Name = "牛奶",
-                    Price = 5
+            //return new JsonResult(new List<Products>
+            //{
+            //    new Products
+            //    {
+            //        ID = 1,
+            //        Name = "牛奶",
+            //        Price = 5
 
-                },
-                new Products
-                {
-                    ID = 2,
-                    Name = "面包",
-                    Price = 2
+            //    },
+            //    new Products
+            //    {
+            //        ID = 2,
+            //        Name = "面包",
+            //        Price = 2
 
-                }
+            //    }
 
-            });
+            //});
+
+            return "xxxxxxxxxxxxxx";
         }
 
-        //[Route("{id}",Name = "GetProduct")]
-        //public IActionResult GetProducts(int id)
-        //{
-
-        //    if (!ModelState.IsValid)//字段属性验证
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-
-        //    return Ok(new List<Products>
-        //    {
-        //        new Products
-        //        {
-        //            ID = 1,
-        //            Name = "牛奶",
-        //            Price = 5
-
-        //        },
-        //        new Products
-        //        {
-        //            ID = 2,
-        //            Name = "面包",
-        //            Price = 2
-
-        //        }
-
-        //    });
-        //}
-
-        //[HttpPut("{id}")]
-        //public IActionResult Put(int id,[FromBody] Products products)
-        //{
-        //    if (products==null)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    if (products.Name == "产品")
-        //    {
-        //        ModelState.AddModelError("Name", "产品的名称不可以是'产品'二字");
-        //    }
-
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-
-
-
-        //    return NoContent();
-        //}
 
         /// <summary>
         /// 自带Get

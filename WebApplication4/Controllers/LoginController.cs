@@ -23,7 +23,7 @@ namespace Blog.Core.Controllers
     /// </summary>
     [Produces("application/json")]
     [Route("api/Login")]
-    [AllowAnonymous]
+    [ApiController]
     public class LoginController : Controller
     {
         readonly ISysUserInfoServices _sysUserInfoServices;
@@ -57,6 +57,9 @@ namespace Blog.Core.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("Token")]
+        //[Authorize(Roles ="Admin")]//设置角色
+        //[Authorize(Roles = "System")]//设置多个角色
+        //[Authorize(Policy = "SystemOrAdmin")]//设置策略（在ConfigureService 已经设置）
         public async Task<object> GetJwtStr(string name, string pass)
         {
             string jwtStr = string.Empty;

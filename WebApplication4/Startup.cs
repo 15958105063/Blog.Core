@@ -12,7 +12,9 @@ using Microsoft.Extensions.Options;
 using static Blog.Core.SwaggerHelper.CustomApiVersion;//引用版本类（自定义）
 using System.Reflection;//需要引用
 using Swashbuckle.AspNetCore.Swagger;//需要引用
+using Blog.Core.AuthHelper;//需要引用（自行一中间件）
 using System.IO;
+using Blog.Core.Middlewares;
 
 
 namespace Blog.Core
@@ -28,12 +30,12 @@ namespace Blog.Core
             Configuration = configuration;
         }
 
+
         public IConfiguration Configuration { get; }
 
-      
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+            public void ConfigureServices(IServiceCollection services)
         {
             var basePath = Microsoft.DotNet.PlatformAbstractions.ApplicationEnvironment.ApplicationBasePath;
 
@@ -60,9 +62,40 @@ namespace Blog.Core
                 //c.IncludeXmlComments(xmlPath, true);//默认的第二个参数是false，这个是controller的注释，记得修改
 
 
+                //#region Token绑定到ConfigureServices
+                ////添加header验证信息
+                ////c.OperationFilter<SwaggerHeader>();
+                //var security = new Dictionary<string, IEnumerable<string>> { { "Blog.Core", new string[] { } }, };
+                //c.AddSecurityRequirement(security);
+                ////方案名称“Blog.Core”可自定义，上下一致即可
+                //c.AddSecurityDefinition("Blog.Core", new ApiKeyScheme
+                //{
+                //    Description = "JWT授权(数据将在请求头中进行传输) 直接在下框中输入Bearer {token}（注意两者之间是一个空格）\"",
+                //    Name = "Authorization",//jwt默认的参数名称
+                //    In = "header",//jwt默认存放Authorization信息的位置(请求头中)
+                //    Type = "apiKey"
+                //});
+                //#endregion
+
             });
 
             #endregion
+
+            #region Authorize 权限认证三步走
+
+            //#region 基于策略的授权（简单版）
+            //// 1【授权】、这个和上边的异曲同工，好处就是不用在controller中，写多个 roles 。
+            //// 然后这么写 [Authorize(Policy = "Admin")]
+            //services.AddAuthorization(options =>
+            //{
+            //    options.AddPolicy("Client", policy => policy.RequireRole("Client").Build());
+            //    options.AddPolicy("Admin", policy => policy.RequireRole("Admin").Build());
+            //    options.AddPolicy("SystemOrAdmin", policy => policy.RequireRole("Admin", "System"));
+            //});
+            //#endregion
+
+            #endregion
+
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
@@ -91,6 +124,13 @@ namespace Blog.Core
                 //这个时候去launchSettings.json中把"launchUrl": "swagger/index.html"去掉， 然后直接访问localhost:8001/index.html即可
             });
             #endregion
+
+            #region 自定义认证中间件
+            //自定义认证中间件
+            //app.UseJwtTokenAuth(); //也可以app.UseMiddleware<JwtTokenAuth>();
+            #endregion
+
+
 
             //#region Swagger
 
